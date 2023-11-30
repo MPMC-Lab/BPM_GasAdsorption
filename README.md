@@ -20,9 +20,29 @@ This function performs forward modeling for gas physical adsorption. It simulate
 - **Langmuir Isotherm (`Isotherm_Langmuir`)**: Calculates the adsorption quantity based on the Langmuir isotherm model.
 - **Derivative of Langmuir Isotherm (`Deriv_Langmuir`)**: Computes the derivative of the Langmuir isotherm model.
 
+## Authors
+
+- **Yesol Hyun** - School of Mathematics and Computing (Computational Science and Engineering), Yonsei University - yesol2@yonsei.ac.kr
+- **Geunwoo Oh** - School of Mathematics and Computing (Computational Science and Engineering), Yonsei University - gwoh@yonsei.ac.kr
+- **Jung-Il Choi** - School of Mathematics and Computing (Computational Science and Engineering), Yonsei University - jic@yonsei.ac.kr
+
+
 ## Installation
 
 Clone the repository to your local machine using:
 
 ```bash
 git clone https://github.com/your-username/your-repository-name.git
+
+
+## Contributing
+
+Contributions to this project are welcome. Please fork the repository and submit a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## Acknowledgments
+
+Special thanks to the contributors and researchers who have provided insights and feedback on this project.
