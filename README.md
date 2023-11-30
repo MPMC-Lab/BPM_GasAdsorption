@@ -46,3 +46,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 Special thanks to the contributors and researchers who have provided insights and feedback on this project.
+
+##  References
+For more information, please the reference paper and School of Mathematics and Computing (Computational Science and Engineering)
