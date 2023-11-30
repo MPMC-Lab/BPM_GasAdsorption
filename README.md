@@ -32,8 +32,7 @@ This function performs forward modeling for gas physical adsorption. It simulate
 Clone the repository to your local machine using:
 
 ```bash
-git clone https://github.com/your-username/your-repository-name.git
-
+git clone https://github.com/MPMC-Lab/1dGasAdsorption_PI_repo.git
 
 ## Contributing
 
