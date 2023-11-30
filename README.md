@@ -46,5 +46,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 Special thanks to the contributors and researchers who have provided insights and feedback on this project.
 
-##  References
-For more information, please the reference paper and School of Mathematics and Computing (Computational Science and Engineering)
+## References
+
+For more information, please refer to the reference paper(s) associated with this project, and for further academic context, visit the School of Mathematics and Computing (Computational Science and Engineering) at Yonsei University.
+
