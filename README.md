@@ -33,7 +33,7 @@ Clone the repository to your local machine using:
 
 ```bash
 git clone https://github.com/MPMC-Lab/1dGasAdsorption_PI_repo.git
-
+```
 Alternatively, the source files can be downloaded through github menu 'Download ZIP'.
 
 ## Contributing
@@ -51,4 +51,5 @@ Special thanks to the contributors and researchers who have provided insights an
 ## References
 
 For more information, please refer to the reference paper(s) associated with this project, and for further academic context, visit the School of Mathematics and Computing (Computational Science and Engineering) at Yonsei University.
+
 
