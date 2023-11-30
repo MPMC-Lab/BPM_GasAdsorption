@@ -1,4 +1,4 @@
-# Gas Adsorption Model using Bayesian Analysis
+# Bayesian predictive model for gas adsorption
 
 This repository contains MATLAB code dedicated to modeling gas adsorption processes. The codebase leverages Bayesian analysis and various isotherm models to provide a comprehensive tool for understanding and predicting gas adsorption behavior. Key functionalities include the setup and execution of Bayesian analysis, forward modeling based on inferred parameters, and essential functions for solving linear systems and calculating isotherm properties.
 
