@@ -114,6 +114,9 @@ for i = 1:NumCurve
     % Further data processing for Bayesian inference
     idx1 = find(c_data <= 0.1, 1, 'last');
     idx2 = find(c_data > 0 & c_data <= 0.95, 1, 'last');
+    
+    tf(i)= max(t_data);
+    
     t_interp = linspace(t_data(idx1), t_data(idx2), Ndata);
     c_interp = pchip(t_data(idx1:idx2), c_data(idx1:idx2) * cFeed, t_interp);
     
@@ -394,7 +397,7 @@ end
 %>                  - Detects breakthrough times based on concentration thresholds.
 %======================================================================================================================
 % Function definition for the adsorption model
-function [t, c, q] = Adsorption_Model(dt, ngrid, dz, par, epsilon, cFeed, tf,us, rho)
+function [t, c, q] = Adsorption_Model(dt, ngrid, dz, par, epsilon, cFeed, tf,num,us, rho)
 % Define model parameter 
 par= 10.^par;
 
