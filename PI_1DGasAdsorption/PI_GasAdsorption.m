@@ -1,39 +1,35 @@
-%% General Code Description of  PI_GasAdsorption.m and Author Introduction
+%% General Code Description of PI_GasAdsorption.m and Author Introduction
 %======================================================================================================================
 %> @ Code Description:
-%> @ File       PI_GasAdsorption.m
-%> @ Brief      An advanced parameter identification module based on Bayesian inference for gas adsorption processes.
-%> @ Details    PI_GasAdsorption is the main program for parameter identification in gas adsorption model.
-%>              This module includes loading of experimental data and setting up the Bayesian inference framework.
+%> @ File        PI_GasAdsorption.m
+%> @ Brief       Advanced parameter identification module based on Bayesian inference for gas adsorption processes.
+%> @ Details     PI_GasAdsorption serves as the main program for parameter identification in gas adsorption models,
+%>               encompassing a holistic approach that integrates experimental data processing with Bayesian inference.
 %>
-%>              The parameter identification process in gas adsorption models via Bayesian inference unfolds as follows:
-%>              (1) Parameter Establishment: Starts by defining a range of parameters, grounded in the physical attributes of gases and adsorbents.
-%>              (2) Bayesian Inference Optimization: Adjusts the Bayesian inference settings in alignment with the unique properties of the materials and experimental conditions.
-%>                  This includes optimizing the number of steps, samples, and the calibration of model predictions with actual measurements for enhanced accuracy.
-%>              (3) Iterative Refinement and Analysis: This meticulous approach ensures that each iteration of Bayesian inference is both efficient and effective.
-%>                  The process culminates in a comprehensive analysis, where the estimated parameters from the model are compared with the actual experimental data, often visualized through detailed graphs.
-
+%>               The process is characterized by the following steps:
+%>               (1) Parameter Establishment: Initiation by defining parameters based on physical attributes of gases and adsorbents.
+%>               (2) Bayesian Inference Optimization: Alignment of Bayesian inference settings with material properties and experimental conditions,
+%>                   including optimization of steps, samples, and calibration of model predictions against actual measurements.
+%>               (3) Iterative Refinement and Analysis: Ensures efficient and effective Bayesian inference iterations, leading to a comprehensive
+%>                   analysis where estimated parameters from the model are juxtaposed with actual experimental data, often visualized through graphs.
+%>               (4) Module for Bayesian Parameter Identification: Facilitates the entire process of parameter identification,
+%>                   from setting initial values and options for Bayesian inference to numerically solving the model with estimated parameters
+%>                   and optimizing these parameters through a rigorous Bayesian analysis.
 %>
 %> @ Author Introduction
 %>              - Yesol Hyun (yesol2@yonsei.ac.kr), School of Mathematics and Computing (Computational Science and Engineering), Yonsei University
 %>              - Geunwoo Oh (gwoh@yonsei.ac.kr), School of Mathematics and Computing (Computational Science and Engineering), Yonsei University
 %>              - Jung-Il Choi (jic@yonsei.ac.kr), School of Mathematics and Computing (Computational Science and Engineering), Yonsei University
-
+%>
 %> @ Date        November 2023
 %> @ Version     1.0
-%> @ Cpyright   Copyright (c) 2023-2023 Yesol Hyun, Geunwoo Oh, and Jung-Il Choi, Yonsei University, All rights reserved.
+%> @ Copyright   Copyright (c) 2023-2023 Yesol Hyun, Geunwoo Oh, and Jung-Il Choi, Yonsei University, All rights reserved.
 %> @ License     This project is released under the terms of the MIT License (see LICENSE file).
 %======================================================================================================================
-
-%> @brief       Module for Bayesian parameter identification in gas adsorption models.
-%> @details     This module facilitates parameter identification for gas adsorption processes using Bayesian inference.
-%>              The process involves comparing experimental data with simulation results from the gas adsorption model.
-%>              The steps include setting initial values and options for Bayesian inference, loading experimental data,
-%>              numerically solving the model with estimated parameters, and optimizing these parameters through Bayesian analysis.
-
 close all;clear all; clc; warning off;
 rng(100,'twister')
 uqlab
+
 %% Experimental Data Preparation and Initial Analysis for Parameter Identification
 %======================================================================================================================
 %> @details     This section of the PI_GasAdsorption.m module encompasses the preparation of experimental data and the initial setup for Bayesian analysis in gas adsorption models. The process includes:
