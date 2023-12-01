@@ -29,7 +29,6 @@
 close all;clear all; clc; warning off;
 rng(100,'twister')
 uqlab
-
 %% Experimental Data Preparation and Initial Analysis for Parameter Identification
 %======================================================================================================================
 %> @details     This section of the PI_GasAdsorption.m module encompasses the preparation of experimental data and the initial setup for Bayesian analysis in gas adsorption models. The process includes:
@@ -146,37 +145,37 @@ myData.y = [((Ndata - 1) / Ndata) * dcdt_tmp, (1 / Ndata) * data_tbr];
 myData.Name = 'Exp data';
 
 % Setting up the forward model for Bayesian analysis
-ModelOpts1.mHandle = @(par) uq_PhysicalAdsorption(par, t_exp, c_exp, dt, ngrid, dz, cFeed, epsilon, tf, v,ModelNum,rho, rho_b, rho_g, dp, mu, NumCurve, max_dcdt, max_tbr, Ndata);
-ModelOpts1.isVectorized = true;
-myForwardModel1 = uq_createModel(ModelOpts1);
-BayesOpts.ForwardModel = myForwardModel1;
+ModelOpts.mHandle = @(par) uq_PhysicalAdsorption(par, t_exp, c_exp, dt, ngrid, dz, cFeed, epsilon, tf, v,ModelNum,rho, rho_b, rho_g, dp, mu, NumCurve, max_dcdt, max_tbr, Ndata);
+ModelOpts.isVectorized = true;
+myForwardModel = uq_createModel(ModelOpts);
+BayesOpts.ForwardModel = myForwardModel;
 
 % Defining prior distributions for Bayesian parameters
-PriorOpts1.Marginals(1).Name = 'b1';
-PriorOpts1.Marginals(1).Type = 'Uniform';
-PriorOpts1.Marginals(1).Parameters = [1 5];
+PriorOpts.Marginals(1).Name = 'b1';
+PriorOpts.Marginals(1).Type = 'Uniform';
+PriorOpts.Marginals(1).Parameters = [1 5];
 
-PriorOpts1.Marginals(2).Name = 'qm';
-PriorOpts1.Marginals(2).Type = 'Uniform';
-PriorOpts1.Marginals(2).Parameters = [-2 0];
+PriorOpts.Marginals(2).Name = 'qm';
+PriorOpts.Marginals(2).Type = 'Uniform';
+PriorOpts.Marginals(2).Parameters = [-2 0];
 
-PriorOpts1.Marginals(3).Name = 'Dm';
-PriorOpts1.Marginals(3).Type = 'Uniform';
-PriorOpts1.Marginals(3).Parameters = [-7 -5];
+PriorOpts.Marginals(3).Name = 'Dm';
+PriorOpts.Marginals(3).Type = 'Uniform';
+PriorOpts.Marginals(3).Parameters = [-7 -5];
 
-PriorOpts1.Marginals(4).Name = 'De';
-PriorOpts1.Marginals(4).Type = 'Uniform';
-PriorOpts1.Marginals(4).Parameters = [-7 -5];
+PriorOpts.Marginals(4).Name = 'De';
+PriorOpts.Marginals(4).Type = 'Uniform';
+PriorOpts.Marginals(4).Parameters = [-7 -5];
 
 % Creating the prior distribution as an input object
-myPriorDist1 = uq_createInput(PriorOpts1);
-BayesOpts.Prior = myPriorDist1;
+myPriorDist = uq_createInput(PriorOpts);
+BayesOpts.Prior = myPriorDist;
 
 % Setting up the discrepancy model for the Bayesian analysis
-SigmaOpts1.Marginals.Name = 'sigma2';
-SigmaOpts1.Marginals.Type = 'Uniform';
-SigmaOpts1.Marginals.Parameters = [0 (0.05)^2];
-mySigmaDist = uq_createInput(SigmaOpts1);
+SigmaOpts.Marginals.Name = 'sigma2';
+SigmaOpts.Marginals.Type = 'Uniform';
+SigmaOpts.Marginals.Parameters = [0 (0.05)^2];
+mySigmaDist = uq_createInput(SigmaOpts);
 DiscrepancyOptsUnknownDisc.Type = 'Gaussian';
 DiscrepancyOptsUnknownDisc.Prior = mySigmaDist;
 BayesOpts.Discrepancy = DiscrepancyOptsUnknownDisc;
@@ -193,7 +192,6 @@ Solver.MCMC.Visualize.Parameters = [1 2 3 4];
 BayesOpts.Type = 'Inversion';
 BayesOpts.Data = myData;
 BayesOpts.Solver = Solver;
-
 %% Execution of Bayesian Analysis and Forward Modeling Using IUQ Results
 %======================================================================================================================
 %> @details     This section performs the Bayesian analysis for gas adsorption parameter identification and conducts forward modeling using the inferred parameters.
@@ -214,15 +212,14 @@ BayesOpts.Solver = Solver;
 %>                  - Utilize inferred parameters to run forward models.
 %>                  - Compare modeled data with experimental data and visualize the results.
 %======================================================================================================================
-
 % Execution of Bayesian Analysis
 tic
-myBayesianAnalysis_Step1 = uq_createAnalysis(BayesOpts); % Create Bayesian analysis
+myBayesianAnalysis_Step = uq_createAnalysis(BayesOpts); % Create Bayesian analysis
 uq_time = toc; % Record the time taken for the analysis
 
 % Filtering MCMC chains with low acceptance rates
-uq_display(myBayesianAnalysis_Step1, 'acceptance', true); % Display acceptance rates
-acceptance = myBayesianAnalysis_Step1.Results.Acceptance; % Extract acceptance rates
+uq_display(myBayesianAnalysis_Step, 'acceptance', true); % Display acceptance rates
+acceptance = myBayesianAnalysis_Step.Results.Acceptance; % Extract acceptance rates
 [~, tolL, tolU, tolC] = isoutlier(acceptance, 'ThresholdFactor', 2); % Identify outliers
 TF = acceptance < min(max(tolL, 0.1), tolC); % Thresholding low acceptance rates
 badchains = find(TF); % Identify bad chains
@@ -230,16 +227,16 @@ badchains = find(TF); % Identify bad chains
 yline(tolL, 'b--');
 yline(tolU, 'b--');
 yline(tolC, 'r--');
-uq_postProcessInversion(myBayesianAnalysis_Step1, 'badChains', badchains);
+uq_postProcessInversion(myBayesianAnalysis_Step, 'badChains', badchains);
 scatter(badchains, acceptance(badchains), 'red', 'filled');
 legend('All chains', 'Lower Bound', 'Upper Bound', 'Median');
 
 % Reporting and Displaying Bayesian Analysis Results
-uq_print(myBayesianAnalysis_Step1); % Print out the analysis results
-uq_display(myBayesianAnalysis_Step1); % Display results (prior and posterior distributions)
+uq_print(myBayesianAnalysis_Step); % Print out the analysis results
+uq_display(myBayesianAnalysis_Step); % Display results (prior and posterior distributions)
 
 % Extracting optimal parameters from the Bayesian analysis
-optpar_tmp = myBayesianAnalysis_Step1.Results.PostProc.PointEstimate.X{1, 1};
+optpar_tmp = myBayesianAnalysis_Step.Results.PostProc.PointEstimate.X{1, 1};
 optpar_tmp = 10.^optpar_tmp(1:4); % Transforming the parameters back from log scale
 
 % Saving the Bayesian analysis results
@@ -587,13 +584,39 @@ for i = (n-1):-1:1
     x(i) = (d(i) - c(i) * x(i+1)) / b(i);
 end
 end
-%% Langmuir Isotherm Function
-function g = Isotherm_Langmuir(c, b, qm)
-% Calculates the Langmuir isotherm
-g = qm * (b * c) ./ (1 + b * c);
+%% Langmuir isotherm
+function g =Isotherm_Langmuir(c,b,qm)
+g= qm*(b*c)./(1+b*c);
 end
-%% Derivative of Langmuir Isotherm Function
-function gprime = Deriv_Langmuir(c, b, qm)
-% Calculates the derivative of the Langmuir isotherm
-gprime = (b * qm) ./ (b * c + 1) - (b^2 * c * qm) ./ (b * c + 1).^2;
+%% Freudlich
+function g =Isotherm_Freudlich(c,b,qm)
+c= max(c,0);
+g=qm*real(c.^(1/b));
+end
+%% Linear
+function g =Isotherm_Linear(c,qm)
+g=qm*c;
+end
+%% Toth
+function g =Isotherm_Toth(c,b,qm,t)
+c= max(c,0);
+g= qm*(b*c)./((1+(b*c).^t).^(1/t));
+end
+%% Derivative of Langmuir isotherm
+function gprime =Deriv_Langmuir(c,b,qm)
+gprime= (b*qm)./(b*c + 1) - (b^2*c*qm)./(b*c + 1).^2 ;
+end
+%% Derivative of Freudlich isotherm
+function gprime =Deriv_Freudlich(c,b,qm)
+c= max(c,0);
+gprime=(c.^(1/b - 1)*qm)/b;
+end
+%% Derivative of Linear isotherm
+function gprime =Deriv_Linear(qm)
+gprime=qm;
+end
+%% Derivative of Toth isotherm
+function gprime =Deriv_Toth(c,b,qm,t)
+c= max(c,0);
+gprime= (b*qm)/((b*c).^t + 1).^(1/t) - (b^2.*c*qm*(b*c).^(t - 1))/((b.*c).^t + 1).^(1/t + 1);
 end
