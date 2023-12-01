@@ -1,7 +1,7 @@
 %% General Code Description of  PI_GasAdsorption.m and Author Introduction
 %======================================================================================================================
 %> @ Code Description:
-%> @ File        PI_GasAdsorption.m
+%> @ File       PI_GasAdsorption.m
 %> @ Brief      An advanced parameter identification module based on Bayesian inference for gas adsorption processes.
 %> @ Details    PI_GasAdsorption is the main program for parameter identification in gas adsorption model.
 %>              This module includes loading of experimental data and setting up the Bayesian inference framework.
@@ -30,6 +30,7 @@
 %>              The process involves comparing experimental data with simulation results from the gas adsorption model.
 %>              The steps include setting initial values and options for Bayesian inference, loading experimental data,
 %>              numerically solving the model with estimated parameters, and optimizing these parameters through Bayesian analysis.
+
 close all;clear all; clc; warning off;
 rng(100,'twister')
 uqlab
@@ -78,6 +79,15 @@ dt = 20; % Time step [s]
 nz = ngrid; % Alias for number of grid points
 us = v; % Superficial velocity alias [m/s]
 Ndata = 30; % Number of data points for Bayesian analysis
+
+ModelNum =1;
+if ModelNum ==1
+    ModelName = 'Langmuir';
+elseif ModelNum==2
+    filename = 'Linear';
+elseif  ModelNum==3
+    filename = 'Toth';
+end
 
 % Processing each experimental data curve
 for i = 1:NumCurve
@@ -137,7 +147,7 @@ myData.y = [((Ndata - 1) / Ndata) * dcdt_tmp, (1 / Ndata) * data_tbr];
 myData.Name = 'Exp data';
 
 % Setting up the forward model for Bayesian analysis
-ModelOpts1.mHandle = @(par) uq_PhysicalAdsorption(par, t_exp, c_exp, dt, ngrid, dz, cFeed, epsilon, tf, v, rho, rho_b, rho_g, dp, mu, NumCurve, max_dcdt, max_tbr, Ndata);
+ModelOpts1.mHandle = @(par) uq_PhysicalAdsorption(par, t_exp, c_exp, dt, ngrid, dz, cFeed, epsilon, tf, v,ModelNum,rho, rho_b, rho_g, dp, mu, NumCurve, max_dcdt, max_tbr, Ndata);
 ModelOpts1.isVectorized = true;
 myForwardModel1 = uq_createModel(ModelOpts1);
 BayesOpts.ForwardModel = myForwardModel1;
@@ -234,8 +244,8 @@ optpar_tmp = myBayesianAnalysis_Step1.Results.PostProc.PointEstimate.X{1, 1};
 optpar_tmp = 10.^optpar_tmp(1:4); % Transforming the parameters back from log scale
 
 % Saving the Bayesian analysis results
-filename = 'SaveResults_IUQ_GasAdsorption.mat';
-save(filename); % Save the current results
+filename_mat = sprintf('SaveResults_IUQ_GasAdsorption_%s.mat',ModelName);
+save(filename_mat); % Save the current results
 
 % Forward Modeling using Inferred Parameters
 for i = 1:NumCurve
@@ -257,7 +267,7 @@ for i = 1:NumCurve
     
     Ngrid = ngrid(i);
     
-    [t,c,~]= Adsorption_Model(10,Ngrid,dz,log10(par),epsilon,cFeed,200*60,us(i),rho(i));
+    [t,c,~]= Adsorption_Model(10,Ngrid,dz,log10(par),epsilon,cFeed,200*60,ModelNum,us(i),rho(i));
     
     c_breakthrough=(c(Ngrid,:)+c(Ngrid+1,:))./2;
     c_est = c_breakthrough/cFeed;
@@ -277,8 +287,8 @@ for i = 1:NumCurve
 end
 
 % Saving the results of forward modeling
-filename = 'IUQ_Results_OptimalParameter.csv';
-dlmwrite(filename, optpar_disp, 'delimiter', ',', '-append'); % Append results to a CSV file
+filename_csv = sprintf('IUQ_Results_OptimalParameter_%s.csv',ModelName);
+dlmwrite(filename_csv, optpar_disp, 'delimiter', ',', '-append'); % Append results to a CSV file
 %% IUQ Procedure Module for Parameter Estimation in Physical Adsorption
 %======================================================================================================================
 %> @details     This function, uq_PhysicalAdsorption, is designed to execute the Inverse Uncertainty Quantification (IUQ) procedure for parameter estimation in physical adsorption models.
@@ -301,7 +311,7 @@ dlmwrite(filename, optpar_disp, 'delimiter', ',', '-append'); % Append results t
 %>                  - Implements checks for unrealistic model outputs.
 %>                  - Compiles the differential rate and time-to-breakthrough data for each parameter set.
 %======================================================================================================================
-function t_IUQ = uq_PhysicalAdsorption(X, tref_multi, cref_multi, dt, ngrid, dz, cFeed, epsilon, tf, us, rho, rho_b, rho_g, dp, mu, NumCurve, max_dcdt, max_tbr, Ndata)
+function t_IUQ = uq_PhysicalAdsorption(X, tref_multi, cref_multi, dt, ngrid, dz, cFeed, epsilon, tf, us,num,rho, rho_b, rho_g, dp, mu, NumCurve, max_dcdt, max_tbr, Ndata)
 
 Npar = size(X, 1); % Number of parameter sets
 for j = 1:Npar
@@ -327,7 +337,7 @@ for j = 1:Npar
         
         Ngrid = ngrid(i);
         
-        [t_est,c_tmp,~]= Adsorption_Model(dt,Ngrid,dz,log10(par),epsilon,cFeed,tf(i),us(i),rho(i));
+        [t_est,c_tmp,~]= Adsorption_Model(dt,Ngrid,dz,log10(par),epsilon,cFeed,tf(i),num,us(i),rho(i));
         
         c_breakthrough=(c_tmp(Ngrid,:)+c_tmp(Ngrid+1,:))./2;
         c_est = c_breakthrough;
@@ -387,10 +397,23 @@ end
 function [t, c, q] = Adsorption_Model(dt, ngrid, dz, par, epsilon, cFeed, tf,us, rho)
 % Define model parameter 
 par= 10.^par;
-k_LDF= par(1);
-b=par(2);
-qm=par(3);
-D= par(4);
+
+if num==1 %num 1= Langmuir
+    k_LDF= par(1);
+    b=par(2);
+    qm=par(3);
+    D= par(4);
+elseif num==2 %num 2= Linear
+    k_LDF=par(1);
+    K_H=par(2);
+    D= par(3);
+elseif num==3 %num 3= Toth
+    k_LDF=par(1);
+    b=par(2);
+    qm=par(3);
+    n_Toth= par(4);
+    D= par(5);
+end
 
 % Time stepping and implicit solving
 t_tmp = 0:dt:tf;
@@ -415,6 +438,25 @@ for nt = 2:ntime
     t(nt)=t(nt-1)+dt;
     t_cn= (t(nt)+t(nt-1))/2;
     
+    % Preallocate  and initialize necessary vector
+    n = ngrid-1;
+    Amatrix= zeros(n);
+    delta_old= zeros(n,1);
+    F= zeros(n,1);
+    
+    c_old = c(:,nt-1);
+    q_old= q(:,nt-1);
+    
+    if nt==2
+        if num==1
+            g_old=Isotherm_Langmuir(c_old,b,qm);
+        elseif num==2
+            g_old=Isotherm_Linear(c_old,K_H);
+        elseif num==3
+            g_old=Isotherm_Toth(c_old,b,qm,n_Toth); 
+        end
+    end
+    
     % Newton iteration for solving the nonlinear governing equations 
     for iter = 1:5
         if iter==1
@@ -422,9 +464,17 @@ for nt = 2:ntime
         end
         
         for nz=2:ngrid
+            if num==1
                 g_tmp=Isotherm_Langmuir(c_tmp(nz),b,qm);
                 gprime_tmp=Deriv_Langmuir(c_tmp(nz),b,qm);
-
+            elseif num==2
+                g_tmp=Isotherm_Linear(c_tmp(nz),K_H);
+                gprime_tmp=Deriv_Linear(K_H);
+            elseif num==3
+                g_tmp=Isotherm_Toth(c_tmp(nz),b,qm,n_Toth);
+                gprime_tmp=Deriv_Toth(c_tmp(nz),b,qm,n_Toth);
+            end
+            
             F_conv= beta*(c_tmp(nz)-c_tmp(nz-1)+c_old(nz)-c_old(nz-1));
             F_diff= gamma*(c_tmp(nz+1)-2*c_tmp(nz)+c_tmp(nz-1)+c_old(nz+1)-2*c_old(nz)+c_old(nz-1));
             q_tmp= (lambda*(g_tmp+ g_old(nz))+(1-lambda)*q_old(nz))/(1+lambda);
@@ -452,7 +502,17 @@ for nt = 2:ntime
         
         % Solving the system using Thomas algorithm
         delta = thomas(Amatrix, RHS);
-        % [Updating concentration and checking convergence]
+        
+        % Updating concentration and checking convergence
+        c_tmp(2:ngrid)= c_tmp(2:ngrid)+delta;
+        c_tmp(1) = 2*cFeed  - c_tmp(2);
+        c_tmp(ngrid+1) = c_tmp(ngrid);
+        tol= sqrt(sum((delta-delta_old).^2)/length(delta));
+        tol_save(nt,iter)= tol;
+        delta_old= delta;
+        
+        max_F= max(F);
+        relF= abs(max_F/max_Fold);
         
         % Break from iteration upon convergence
         if (relF <= 1e-10 || iter >= 5)
@@ -464,8 +524,14 @@ for nt = 2:ntime
     % Update concentration and adsorption quantities for current time step
     c(:, nt) = c_fin;
 
+    if num==1
         g_new=Isotherm_Langmuir(c(:,nt),b,qm);
-
+    elseif num==2
+        g_new=Isotherm_Linear(c(:,nt),K_H);
+    elseif num==3
+        g_new=Isotherm_Toth(c(:,nt),b,qm,n_Toth);
+    end
+    
     q(:,nt) = (lambda*(g_new+g_old) + (1-lambda)*q_old)/(1+lambda); % calculating new q
     g_old = g_new;
        
