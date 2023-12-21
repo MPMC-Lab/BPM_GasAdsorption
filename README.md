@@ -4,7 +4,7 @@ This repository contains MATLAB code dedicated to modeling gas adsorption proces
 
 ## Detailed Description
 
-### 1. Experimental Data Preparation and Bayesian Analysis Setup (`BPM_GasAdsorption_Main.m`)
+### 1. Comprehensive Bayesian Analysis and Results Visualization for Gas Adsorption Modeling (`BPM_GasAdsorption_Main.m`)
 The `BPM_GasAdsorption_Main.m` module is central to the Bayesian analysis of gas adsorption processes. It is designed to process experimental data meticulously, laying the groundwork for sophisticated analysis. Key steps within this module include:
 - **Data Loading and Processing**: Efficiently manages the ingestion and preliminary treatment of experimental data, ensuring readiness for analysis.
 - **Bayesian Analysis Framework**: Establishes a robust Bayesian inference framework. This involves setting up algorithmic structures for Bayesian analysis, including defining prior distributions and configuring options for Bayesian solvers.
