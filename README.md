@@ -9,7 +9,7 @@ The `BPM_GasAdsorption_Main.m` module is central to the Bayesian analysis of gas
 - **Data Loading and Processing**: Efficiently manages the ingestion and preliminary treatment of experimental data, ensuring readiness for analysis.
 - **Bayesian Analysis Framework**: Establishes a robust Bayesian inference framework. This involves setting up algorithmic structures for Bayesian analysis, including defining prior distributions and configuring options for Bayesian solvers.
 - **Inversion Solver Configuration**: Carefully configures the Bayesian inversion solver and sampler, optimizing them for the specific needs of gas adsorption modeling.
-- **Results Reporting and Visualization**
+- **Results Reporting and Visualization**:Finalizes the analysis process by reporting and visually representing results, focusing on the interpretation and understanding of the Bayesian analysis outcomes.
 
 ### 2. IUQ Procedure Module (`uq_GasAdsorption.m`)
 This function embodies the essence of the Inverse Uncertainty Quantification (IUQ) method, a critical aspect of modern parameter estimation techniques in physical adsorption models. It is designed to:
