@@ -39,7 +39,7 @@ These functions form the backbone of the computational processes within the tool
 Clone the repository to your local machine using:
 
 ```bash
-git clone https://github.com/MPMC-Lab/1dGasAdsorption_PI_repo.git
+git clone https://github.com/MPMC-Lab/BPM_GasAdsorption.git
 ```
 
 Alternatively, the source files can be downloaded through github menu 'Download ZIP'.
