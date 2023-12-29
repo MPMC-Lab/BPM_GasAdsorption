@@ -19,7 +19,7 @@ This function embodies the essence of the Inverse Uncertainty Quantification (IU
 ### 3. Forward Modeling for Gas Physical Adsorption (`Model_GasAdsorption.m`)
 The `Adsorption_Model` function is a testament to the detailed simulation capabilities of the tool. It undertakes forward modeling for gas physical adsorption by:
 - **Employing Various Isotherm Models**: Adapts to different isotherm models, providing versatility in modeling the adsorption process.
-- **Solving with Implicit Solver**: Utilizes an advanced implicit solver with iterative linearization using the Newton methodd, ensuring rapid and precise simulation results even in complex 
+- **Solving with Implicit Solver**: Utilizes an advanced implicit solver with iterative linearization using the Newton method, ensuring rapid and precise simulation results even in complex 
     scenarios.
 
 ### 4. Supporting Functions
