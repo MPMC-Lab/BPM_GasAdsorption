@@ -70,6 +70,9 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 Special thanks to the contributors and researchers who have provided insights and feedback on this project.
 
-## References
+## Contact Information
 
-For more information, please refer to the reference paper(s) associated with this project, and for further academic context, visit the School of Mathematics and Computing (Computational Science and Engineering) at Yonsei University.
+Should you require assistance or have any inquiries, kindly contact Dr. Jung-Il Choi via email at [jic@yonsei.ac.kr](mailto:jic@yonsei.ac.kr).
+
+For detailed information and further reading related to BPM_GasAdsorption, you are encouraged to consult the reference paper. Additional insights and resources are available at School of Mathematics and Computing, within the domain of Computational Science and Engineering at Yonsei University. For more details, please visit our website: [mpmc.yonsei.ac.kr](http://mpmc.yonsei.ac.kr).
+
