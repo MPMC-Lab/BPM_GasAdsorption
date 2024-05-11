@@ -50,7 +50,7 @@ Alternatively, the source files can be downloaded through github menu 'Download 
 Contributions to this project are welcome. Please fork the repository and submit a pull request.
 
 ## Citation
-Please cite the following paper if BPM_GasAdsorption is employed in your scholarly research or project implementation. This citation acknowledges the original authors and supports the ongoing academic collaboration and recognition of their work:
+Please cite the following paper if BPM_GasAdsorption is employed in your research or project implementation. This citation acknowledges the original authors and supports the ongoing academic collaboration and recognition of their work:
 
 ```bibtex
 @article{hyun2024bayesian,
