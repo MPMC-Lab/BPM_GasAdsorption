@@ -66,10 +66,6 @@ Please cite the following paper if BPM_GasAdsorption is employed in your researc
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-## Acknowledgments
-
-Special thanks to the contributors and researchers who have provided insights and feedback on this project.
-
 ## Contact Information
 
 Should you require assistance or have any inquiries, kindly contact Dr. Jung-Il Choi via email at [jic@yonsei.ac.kr](mailto:jic@yonsei.ac.kr).
